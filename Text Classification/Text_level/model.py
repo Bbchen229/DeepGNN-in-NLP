@@ -6,6 +6,7 @@ from dgl.nn.pytorch.conv import GraphConv
 import dgl.function as fn
 import numpy as np
 import word2vec
+#from jknet import JKNet
 
 def gcn_msg(edge):
     return {'m': edge.src['h'], 'w': edge.data['w']}
@@ -41,7 +42,7 @@ class Model(torch.nn.Module):
                  pmi=None,
                  cuda=True,
                  layer_num = 4,
-                 mode = 'norm',
+                 mode = 'cat',
                  ):
         super(Model, self).__init__()
 
@@ -223,7 +224,9 @@ class Model(torch.nn.Module):
             drop1 = self.dropout(h1)
             act1 = self.activation(drop1)
             l = self.Linear(act1).cuda()
+
             return l
+
 
         for i , layer in enumerate(self.layers):
             if i==0:
@@ -250,4 +253,5 @@ class Model(torch.nn.Module):
         act1 = self.activation(drop1)
 
         return self.out_put(act1)
-    
+       
+
